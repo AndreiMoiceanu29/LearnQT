@@ -34,34 +34,36 @@ AddPersonMenu::AddPersonMenu(QListWidgetItem* item, Service& service,bool isUpda
 }
 
 void AddPersonMenu::initializeComponents(){
-	this->win = new QWidget();
-	this->headerLbl = new QLabel("Add Person");
-	this->firstNameLbl = new QLabel("First Name:");
-	this->lastNameLbl = new QLabel("Last Name:");
-	this->ageLbl = new QLabel("Age:");
-	this->idLbl = new QLabel("Id:");
+	this->win = new QWidget{};
+	this->headerLbl = new QLabel{"Add Person"};
+	this->firstNameLbl = new QLabel{"First Name:"};
+	this->lastNameLbl = new QLabel{"Last Name:"};
+	this->ageLbl = new QLabel{"Age:"};
+	this->idLbl = new QLabel{"Id:"};
 	this->firstNameTxt = new QLineEdit();
 	this->lastNameTxt = new QLineEdit();
 	this->ageTxt = new QLineEdit();
 	this->idTxt = new QLineEdit();
-	this->addBtn = new QPushButton("Add");
+	this->addBtn = new QPushButton{"Add"};
+	this->vL = new QVBoxLayout{this};
+	this->hLNames = new QHBoxLayout();
+	this->hLNumbers = new QHBoxLayout();
+	this->firstList = new QWidget();
+	this->secondList = new QWidget();
 }
 
 void AddPersonMenu::renderComponents(){
-	QVBoxLayout *vL = new QVBoxLayout();
+ 
 	vL->addWidget(win);
-	QHBoxLayout *hLNames = new QHBoxLayout();
-	QHBoxLayout *hLNumbers = new QHBoxLayout();
-	QWidget *firstList = new QWidget();
-	QWidget *secondList = new QWidget();
+	
 	hLNames->addWidget(firstNameLbl);
 	hLNames->addWidget(firstNameTxt);
 	hLNames->addWidget(lastNameLbl);
 	hLNames->addWidget(lastNameTxt);
 	hLNumbers->addWidget(ageLbl);
-	hLNames->addWidget(ageTxt);
-	hLNames->addWidget(idLbl);
-	hLNames->addWidget(idTxt);
+	hLNumbers->addWidget(ageTxt);
+	hLNumbers->addWidget(idLbl);
+	hLNumbers->addWidget(idTxt);
 	firstList->setLayout(hLNames);
 	secondList->setLayout(hLNumbers);
 	vL->addWidget(firstList);

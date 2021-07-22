@@ -23,6 +23,11 @@ class AddPersonMenu: public QWidget
 	QLabel *idLbl;
 	QLineEdit *idTxt;
 	QPushButton *addBtn;
+	QVBoxLayout *vL;
+	QHBoxLayout *hLNames;
+	QHBoxLayout *hLNumbers;
+	QWidget * firstList;
+	QWidget * secondList;
 
 	QListWidgetItem* oldItem;
 	bool isUpdating;
