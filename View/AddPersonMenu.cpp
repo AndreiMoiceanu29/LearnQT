@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QStringList>
+#include "ListView.h"
 
 AddPersonMenu::AddPersonMenu(){
 	this->initializeComponents();
@@ -15,23 +16,15 @@ AddPersonMenu::AddPersonMenu(){
 	
 }
 
-AddPersonMenu::AddPersonMenu(Service& service){
-	this->service = service;
-	this->isUpdating = false;
+AddPersonMenu::AddPersonMenu(ListView* parent){
+	this->parent = parent;
+
 	this->initializeComponents();
 	this->renderComponents();
 	this->initializeSignals();
 }
 
-AddPersonMenu::AddPersonMenu(QListWidgetItem* item, Service& service,bool isUpdating){
-	this->service = service;
-	this->oldItem = item;
-	this->isUpdating = isUpdating;
-	this->initializeComponents();
-	this->renderComponents();
-	this->initializeSignals();
 
-}
 
 void AddPersonMenu::initializeComponents(){
 	this->win = new QWidget{};
@@ -72,19 +65,40 @@ void AddPersonMenu::renderComponents(){
 }
 
 void AddPersonMenu::initializeSignals(){
-	QObject::connect(addBtn,&QPushButton::clicked, this, [&](){
+	// QObject::connect(addBtn,&QPushButton::clicked, this, [&](){
+		// std::string firstName = this->firstNameTxt->text().toStdString();
+		// std::string lastName = this->lastNameTxt->text().toStdString();
+		// int age = stoi(this->ageTxt->text().toStdString());
+		// int id = stoi(this->idTxt->text().toStdString());
+		// Person person(firstName,lastName,age,id);
+	// 	if(isUpdating){
+			// QString personData = this->oldItem->text();
+			// QStringList strList= personData.split(" ");
+			// Person oldPerson(strList[0].toStdString(),strList[1].toStdString(),strList[2].toInt(),strList[3].toInt());
+			// this->service.updatePerson(oldPerson,person);
+	// 	}else
+	// 		this->service.addPerson(person);
+	// 	this->close();
+	// });
+	QObject::connect(parent, &ListView::addPerson,this,[&](){
+		this->isUpdating = false;
+	});
+	QObject::connect(parent, &ListView::updatePerson,this,[&](Person oldPerson){
+		this->isUpdating = true;
+		this->oldPerson = oldPerson;	
+	});
+	QObject::connect(addBtn, &QPushButton::clicked, this, [&](){
 		std::string firstName = this->firstNameTxt->text().toStdString();
 		std::string lastName = this->lastNameTxt->text().toStdString();
 		int age = stoi(this->ageTxt->text().toStdString());
 		int id = stoi(this->idTxt->text().toStdString());
 		Person person(firstName,lastName,age,id);
-		if(isUpdating){
-			QString personData = this->oldItem->text();
-			QStringList strList= personData.split(" ");
-			Person oldPerson(strList[0].toStdString(),strList[1].toStdString(),strList[2].toInt(),strList[3].toInt());
-			this->service.updatePerson(oldPerson,person);
-		}else
-			this->service.addPerson(person);
+		if(this->isUpdating){
+			emit updatePerson(oldPerson,person);
+		}else{
+			
+			emit addPerson(person);
+		}
 		this->close();
 	});
 }

@@ -7,16 +7,18 @@
 #include <QPushButton>
 #include <QObject>
 #include <QHBoxLayout>
-#include "Service.h"
+//#include "MainGUI.h"
+#include <QObject>
 #include "AddPersonMenu.h"
-
+class MainGUI;
 class ListView: public QWidget
 {
 private:
+	Q_OBJECT
 	QHBoxLayout *mainLayout;
 	QVBoxLayout *buttonLayout;
 
-	Service service;
+	MainGUI* parent;
 
 	QWidget* btnLayoutWidget;
 	QListWidget *personsList;
@@ -28,11 +30,17 @@ private:
 	AddPersonMenu* addPersonMenu;
 public:
 	ListView();
-	ListView(Service);
+	ListView(MainGUI*);
 	~ListView();
 	void initializeComponents();
 	void renderGUI();
-	void reloadList();
+	void reloadList(std::vector<Person>);
 	void connectSignalsSlot();
+	AddPersonMenu* getAddPersonMenuInstance();
+
+signals:
+	void addPerson();
+	void updatePerson(Person person);
+	void deletePerson(int id);
 };
 #endif

@@ -5,13 +5,16 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QObject>
 #include <QLineEdit>
-#include "Service.h"
+//#include "ListView.h"
 #include <QVBoxLayout>
 #include <QListWidgetItem>
+class ListView;
 class AddPersonMenu: public QWidget
 {
-	Service service;
+	Q_OBJECT
+	ListView* parent;
 	QWidget *win;
 	QLabel *headerLbl;
 	QLabel *firstNameLbl;
@@ -28,7 +31,7 @@ class AddPersonMenu: public QWidget
 	QHBoxLayout *hLNumbers;
 	QWidget * firstList;
 	QWidget * secondList;
-
+	Person oldPerson;
 	QListWidgetItem* oldItem;
 	bool isUpdating;
 public:
@@ -36,9 +39,12 @@ public:
 	void renderComponents();
 	void initializeSignals();
 	AddPersonMenu();
-	AddPersonMenu(Service&);
-	AddPersonMenu(QListWidgetItem*, Service&,bool);
+	AddPersonMenu(ListView*);
+	
 	~AddPersonMenu();
+signals:
+	void addPerson(Person& person);
+	void updatePerson(Person& oldPerson, Person& newPerson);
 	
 };
 #endif
